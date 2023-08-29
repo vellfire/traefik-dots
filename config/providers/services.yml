@@ -1,0 +1,14 @@
+---
+http:
+  services:
+  ## Core Services
+    pf:
+      loadBalancer:
+        servers:
+          - url: https://pf.core.lan
+
+  ## Proxmox
+    pve1:
+      loadBalancer:
+        servers:
+          - url: https://pve1.mgmt.lan:8006

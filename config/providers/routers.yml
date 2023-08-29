@@ -1,0 +1,30 @@
+---
+http:
+  routers:
+  ## Core Services
+    pf:
+      service: pf
+      entryPoints:
+        - https
+      rule: Host(`pf.int.example`)
+      middlewares:
+        - default-whitelist
+        - https-redirect
+      tls:
+        certResolver: cloudflare
+        domains:
+          - main: "example.com"
+          - sans: "*.example.com"
+          - sans: "*.int.example.com"
+
+  ## Proxmox
+    pve1:
+      service: pve1
+      entryPoints:
+        - https
+      rule: Host(`pve1.int.example.com`)
+      middlewares:
+        - default-whitelist
+        - https-redirect
+        - pve-headers
+      tls: {}

@@ -1,0 +1,36 @@
+version: '3.9'
+services:
+  traefik:
+    image: traefik:2.10.4
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - proxy
+    env_file:
+      - .env
+    user: 1000:10337
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./config/traefik.yml:/traefik.yml:ro
+      - ./config/providers:/providers:ro
+      - ./config/acme.json:/acme.json
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.traefik.entrypoints: http
+      traefik.http.routers.traefik.rule: Host(`traefik.int.example.com`)
+      traefik.http.routers.traefik.middlewares: "https-redirect@file, default-whitelist@file"
+      traefik.http.routers.traefik-secure.entrypoints: https
+      traefik.http.routers.traefik-secure.rule: Host(`traefik.int.example.com`)
+      traefik.http.routers.traefik-secure.middlewares: "https-redirect@file, default-whitelist@file"
+      traefik.http.routers.traefik-secure.tls: true
+      traefik.http.routers.traefik-secure.service: api@internal
+
+networks:
+  proxy:
+    external: true
