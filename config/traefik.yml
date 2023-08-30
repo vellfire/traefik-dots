@@ -12,10 +12,6 @@ entryPoints:
           permanent: true
   https:
     address: ":443"
-    http:
-      tls: {}
-  # idrac:
-  #   address: ":5900"
 metrics:
   prometheus: {}
 serversTransport:
@@ -27,17 +23,10 @@ providers:
   file:
     directory: /providers
     watch: true
-  # docker:
-    # defaultRule: "Host(`{{ .ContainerName }}.int.mcdade.cloud`)"
-    # endpoint: unix:///var/run/docker.sock
-    # exposedByDefault: true
-    # useBindPortIP: true
-    # network: proxy
-    # watch: true
 certificatesResolvers:
   cloudflare:
     acme:
-      email: 
+      email: johndoe@example.com # Cloudflare email address goes here
       storage: acme.json
       dnsChallenge:
         provider: cloudflare

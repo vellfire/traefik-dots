@@ -6,25 +6,25 @@ http:
       service: pf
       entryPoints:
         - https
-      rule: Host(`pf.int.example`)
+      rule: Host(`pf.int.example.com`)
       middlewares:
         - default-whitelist
         - https-redirect
-      tls:
-        certResolver: cloudflare
-        domains:
-          - main: "example.com"
+      tls: # TLS configuration - required, only required once per domain, I recommend to put all certs required for a domain in one block if you need wildcards
+        certResolver: cloudflare # Name of the cert resolver from traefik.yml - required
+        domains: # Domains to request certs for
+          - main: "example.com" 
           - sans: "*.example.com"
           - sans: "*.int.example.com"
 
   ## Proxmox
-    pve1:
-      service: pve1
-      entryPoints:
+    servicename: # Name of the router - change this
+      service: servicename # Name of the service in services.yml - change this
+      entryPoints: # Entry points to listen on - required
         - https
-      rule: Host(`pve1.int.example.com`)
-      middlewares:
+      rule: Host(`servicename.int.example.com`) # Rule to match - required
+      middlewares: # Middlewares to apply from middlewares.yml - optional
         - default-whitelist
         - https-redirect
         - pve-headers
-      tls: {}
+      tls: {} # TLS configuration - empty brackets pull correct cert from the store (acme.json) if already retrieved, see above for tls example

@@ -1,14 +1,15 @@
 ---
 http:
   services:
-  ## Core Services
+  ## Example Services
+    servicename: # Name of the service - change this
+      loadBalancer: # Load balancer configuration - required
+        servers: # Servers list - required
+          - url: https://url_or_ip_to_service:port # URL or IP to the service
+        passHostHeader: true # Passes the Host header when accessing the service - optional, default true
+  
+  ## Real Example
     pf:
       loadBalancer:
         servers:
           - url: https://pf.core.lan
-
-  ## Proxmox
-    pve1:
-      loadBalancer:
-        servers:
-          - url: https://pve1.mgmt.lan:8006

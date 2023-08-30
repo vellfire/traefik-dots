@@ -1,12 +1,12 @@
 ---
 http:
   middlewares:
-    https-redirect:
+    https-redirect: # Redirects http to https - I don't think this is required per the entryPoint set in traefik.yml, but I don't see any point in removing it
       redirectScheme:
         scheme: https
         permanent: true
 
-    pve-headers:
+    pve-headers: # Headers to add to proxmox requests - makes sure novnc works
       headers:
         frameDeny: true
         sslRedirect: true
@@ -19,26 +19,15 @@ http:
         customRequestHeaders:
           X-Forwarded-Proto: https
 
-    default-whitelist:
+    default-whitelist: # Whitelist for internal networks, if applied denies all other traffic
       ipWhiteList:
         sourceRange:
           - "10.0.0.0/8"
           - "192.168.0.0/16"
           - "172.0.0.0/8"
 
-    # idrac:
-    #   headers:
-    #     frameDeny: true
-    #     browserXssFilter: true
-    #     forceSTSHeader: true
-    #     stsIncludeSubdomains: true
-    #     stsSeconds: 15552000
-    #     customFrameOptionsValue: SAMEORIGIN
-    #     customRequestHeaders:
-    #       X-Forwarded-Proto: https
-
-    secured:
+    proxmox: # Proxmox node chain - chain can be used to add multiple middlewares to a router
       chain:
         middlewares:
           - default-whitelist
-          - default-headers
+          - pve-headers

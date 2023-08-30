@@ -10,7 +10,7 @@ services:
       - proxy
     env_file:
       - .env
-    user: 1000:10337
+    user: 1000:10337 # Change this to your user and group id
     ports:
       - 80:80
       - 443:443
@@ -20,13 +20,13 @@ services:
       - ./config/traefik.yml:/traefik.yml:ro
       - ./config/providers:/providers:ro
       - ./config/acme.json:/acme.json
-    labels:
+    labels: # Traefik dashboard labels - not required
       traefik.enable: "true"
       traefik.http.routers.traefik.entrypoints: http
-      traefik.http.routers.traefik.rule: Host(`traefik.int.example.com`)
+      traefik.http.routers.traefik.rule: Host(`traefik.int.example.com`) # Change this to your domain
       traefik.http.routers.traefik.middlewares: "https-redirect@file, default-whitelist@file"
       traefik.http.routers.traefik-secure.entrypoints: https
-      traefik.http.routers.traefik-secure.rule: Host(`traefik.int.example.com`)
+      traefik.http.routers.traefik-secure.rule: Host(`traefik.int.example.com`) # Change this to your domain
       traefik.http.routers.traefik-secure.middlewares: "https-redirect@file, default-whitelist@file"
       traefik.http.routers.traefik-secure.tls: true
       traefik.http.routers.traefik-secure.service: api@internal
