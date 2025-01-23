@@ -5,10 +5,10 @@ http:
     pf:
       service: pf
       entryPoints:
-        - https
+        - websecure
       rule: Host(`pf.int.example.com`)
       middlewares:
-        - default-whitelist
+        - allowlist
         - https-redirect
       tls: # TLS configuration - required, only required once per domain, I recommend to put all certs required for a domain in one block if you need wildcards
         certResolver: cloudflare # Name of the cert resolver from traefik.yml - required
@@ -21,10 +21,9 @@ http:
     servicename: # Name of the router - change this
       service: servicename # Name of the service in services.yml - change this
       entryPoints: # Entry points to listen on - required
-        - https
+        - websecure
       rule: Host(`servicename.int.example.com`) # Rule to match - required
       middlewares: # Middlewares to apply from middlewares.yml - optional
-        - default-whitelist
-        - https-redirect
+        - allowlist
         - pve-headers
       tls: {} # TLS configuration - empty brackets pull correct cert from the store (acme.json) if already retrieved, see above for tls example
